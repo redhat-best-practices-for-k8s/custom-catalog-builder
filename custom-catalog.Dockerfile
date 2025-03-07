@@ -6,8 +6,7 @@ FROM quay.io/operator-framework/opm:latest as builder
 ADD custom-catalog /configs
 RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
 
-ARG INDEX_VERSION
-ENV INDEX_VERSION=${INDEX_VERSION}
+ARG INDEX_VERSION=test
 
 FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
 # The base image is expected to contain
