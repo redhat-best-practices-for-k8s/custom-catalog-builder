@@ -2,12 +2,12 @@
 # /bin/opm (with serve subcommand)
 FROM quay.io/operator-framework/opm:latest as builder
 
+# Copy FBC root into image at /configs and pre-populate serve cache
+ADD custom-catalog /configs
+RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
+
 ARG INDEX_VERSION
 ENV INDEX_VERSION ${INDEX_VERSION}
-
-# Copy FBC root into image at /configs and pre-populate serve cache
-ADD customcat /configs
-RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
 
 FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
 # The base image is expected to contain
