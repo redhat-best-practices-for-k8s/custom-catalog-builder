@@ -62,6 +62,8 @@ jobs:
           context: .
           file: custom-catalog.Dockerfile
           platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
+          build-args: |
+            INDEX_VERSION=${{matrix.versions}}
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{matrix.versions}}-latest
 
