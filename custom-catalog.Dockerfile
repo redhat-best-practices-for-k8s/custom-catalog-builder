@@ -8,9 +8,9 @@ RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
 
 ARG INDEX_VERSION=test
 
-RUN echo INDEX_VERSION value is $INDEX_VERSION
-
 FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
+
+ARG INDEX_VERSION
 # The base image is expected to contain
 # /bin/opm (with serve subcommand) and /bin/grpc_health_probe
 
