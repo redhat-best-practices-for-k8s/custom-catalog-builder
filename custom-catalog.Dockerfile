@@ -3,7 +3,7 @@
 FROM quay.io/operator-framework/opm:latest as builder
 
 ARG INDEX_VERSION
-ENV INDEX_VERSION=${INDEX_VERSION}
+ENV INDEX_VERSION ${INDEX_VERSION}
 
 # Copy FBC root into image at /configs and pre-populate serve cache
 ADD customcat /configs
