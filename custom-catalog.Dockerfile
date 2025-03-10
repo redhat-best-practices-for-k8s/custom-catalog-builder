@@ -6,11 +6,11 @@ FROM quay.io/operator-framework/opm:latest as builder
 ADD custom-catalog /configs
 RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
 
-ARG INDEX_VERSION=test
+ARG INDEXVERSION=test
 
-FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
+FROM registry.redhat.io/redhat/community-operator-index:${INDEXVERSION}
 
-ARG INDEX_VERSION=test
+ARG INDEXVERSION=test
 # The base image is expected to contain
 # /bin/opm (with serve subcommand) and /bin/grpc_health_probe
 
