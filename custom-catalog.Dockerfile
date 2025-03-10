@@ -10,7 +10,7 @@ ARG INDEX_VERSION=test
 
 FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
 
-ARG INDEX_VERSION
+ARG INDEX_VERSION=test
 # The base image is expected to contain
 # /bin/opm (with serve subcommand) and /bin/grpc_health_probe
 

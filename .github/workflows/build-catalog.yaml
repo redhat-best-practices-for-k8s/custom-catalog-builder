@@ -19,6 +19,7 @@ jobs:
     if: github.repository_owner == 'redhat-best-practices-for-k8s'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         versions: [v4.14, v4.15, v4.16, v4.17]
     steps:
@@ -54,6 +55,10 @@ jobs:
           username: ${{ secrets.QUAY_ROBOT_USERNAME }}
           password: ${{ secrets.QUAY_ROBOT_TOKEN }}
 
+      - name: Verify that matrix.versions is set
+        run: |
+          echo "Matrix versions: ${{matrix.versions}}"
+
       # Example: Pushes the image quay.io/redhat-best-practices-for-k8s/qe-custom-catalog:v4.14-latest
       # The idea being that we want to rebuild the images daily, but apply our custom catalog settings as well.
       - name: Build Catalog Image(s)
@@ -63,7 +68,7 @@ jobs:
           file: custom-catalog.Dockerfile
           platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
           build-args: |
-            "INDEX_VERSION=${{matrix.versions}}"
+            INDEX_VERSION=${{matrix.versions}}
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:${{matrix.versions}}-latest
 
