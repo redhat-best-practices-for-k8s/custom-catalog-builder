@@ -1,16 +1,16 @@
 # The builder image is expected to contain
 # /bin/opm (with serve subcommand)
-FROM quay.io/operator-framework/opm:latest as builder
+FROM quay.io/operator-framework/opm:latest AS builder
 
 # Copy FBC root into image at /configs and pre-populate serve cache
 ADD custom-catalog /configs
 RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
 
-ARG INDEXVERSION=test
+ARG INDEX_VERSION=test
 
-FROM registry.redhat.io/redhat/community-operator-index:${INDEXVERSION}
+FROM registry.redhat.io/redhat/community-operator-index:${INDEX_VERSION}
 
-ARG INDEXVERSION=test
+ARG INDEX_VERSION=test
 # The base image is expected to contain
 # /bin/opm (with serve subcommand) and /bin/grpc_health_probe
 
