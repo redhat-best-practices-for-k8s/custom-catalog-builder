@@ -54,6 +54,9 @@ jobs:
           username: ${{ secrets.QUAY_ROBOT_USERNAME }}
           password: ${{ secrets.QUAY_ROBOT_TOKEN }}
 
+      - name: Force cleanup of docker
+        run: sudo docker rm -f $(docker ps -aq)
+
       # Example: Pushes the image quay.io/redhat-best-practices-for-k8s/qe-custom-catalog:v4.14-latest
       # The idea being that we want to rebuild the images daily, but apply our custom catalog settings as well.
       - name: Build Catalog Image(s)
