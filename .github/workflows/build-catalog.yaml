@@ -60,7 +60,7 @@ jobs:
       # Example: Pushes the image quay.io/redhat-best-practices-for-k8s/qe-custom-catalog:v4.14-latest
       # The idea being that we want to rebuild the images daily, but apply our custom catalog settings as well.
       - name: Build Catalog Image(s)
-        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0
         with:
           context: .
           file: custom-catalog.Dockerfile
