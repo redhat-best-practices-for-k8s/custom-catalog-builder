@@ -48,6 +48,7 @@ jobs:
         with:
           max_attempts: 10
           command: ./linux-amd64-opm validate custom-catalog
+          timeout_minutes: 90
 
       - name: Login to Quay.io
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
@@ -66,6 +67,7 @@ jobs:
         uses: nick-fields/retry@v3
         with:
           max_attempts: 10
+          timeout_minutes: 90
           command: |
             docker buildx build \
               --platform linux/amd64,linux/arm64,linux/ppc64le,linux/s390x \
