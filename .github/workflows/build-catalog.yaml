@@ -43,8 +43,11 @@ jobs:
       - name: Make opm binary executable
         run: chmod +x linux-amd64-opm
 
-      - name: Run opm validate command
-        run: ./linux-amd64-opm validate custom-catalog
+      - name: Run opm validate command with retries
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 10
+          command: ./linux-amd64-opm validate custom-catalog
 
       - name: Login to Quay.io
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
@@ -59,12 +62,14 @@ jobs:
 
       # Example: Pushes the image quay.io/redhat-best-practices-for-k8s/qe-custom-catalog:v4.14-latest
       # The idea being that we want to rebuild the images daily, but apply our custom catalog settings as well.
-      - name: Build Catalog Image(s)
-        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0
+      - name: Build Catalog Image(s) with retries
+        uses: nick-fields/retry@v3
         with:
-          context: .
-          file: custom-catalog.Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/ppc64le,linux/s390x
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:latest
-
+          max_attempts: 10
+          command: |
+            docker buildx build \
+              --platform linux/amd64,linux/arm64,linux/ppc64le,linux/s390x \
+              --file custom-catalog.Dockerfile \
+              --push \
+              --tag ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:latest \
+              .
