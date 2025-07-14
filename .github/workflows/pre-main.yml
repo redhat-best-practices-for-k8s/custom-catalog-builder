@@ -1,0 +1,70 @@
+# Test Build Catalog Image (No Push to Registry)
+name: Test Build Catalog Images
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: quay.io
+  ORGANIZATION: redhat-best-practices-for-k8s
+  IMAGE_NAME: qe-custom-catalog
+
+jobs:
+  test-build-catalog-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Setup docker buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+
+      # Binary: linux-amd64-opm - https://github.com/operator-framework/operator-registry/releases/
+      - name: Download latest opm binary from Github
+        run: |
+          # Get the latest release from the operator-registry repo
+          curl -s https://api.github.com/repos/operator-framework/operator-registry/releases/latest \
+            | grep "browser_download_url.*linux-amd64-opm" \
+            | cut -d : -f 2,3 \
+            | tr -d \" \
+            | wget -qi -
+
+      - name: Make opm binary executable
+        run: chmod +x linux-amd64-opm
+
+      - name: Run opm validate command with retries
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 10
+          command: ./linux-amd64-opm validate custom-catalog
+          timeout_minutes: 90
+
+      - name: Force cleanup of docker
+        run: sudo docker rm -f $(docker ps -aq)
+
+      # Test build only - no push to registry
+      - name: Test Build Catalog Image(s) with retries
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 10
+          timeout_minutes: 90
+          command: |
+            docker buildx build \
+              --platform linux/amd64,linux/arm64,linux/ppc64le,linux/s390x \
+              --file custom-catalog.Dockerfile \
+              --tag ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.pull_request.number || 'test' }} \
+              .
+
+      - name: Show built image info
+        run: |
+          echo "✅ Successfully built catalog image for testing!"
+          echo "Image tag: ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:pr-${{ github.event.pull_request.number || 'test' }}"
+          echo "This image was built locally and NOT pushed to registry." 

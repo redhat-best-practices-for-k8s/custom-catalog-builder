@@ -4,7 +4,7 @@ FROM quay.io/operator-framework/opm:latest as builder
 
 # Copy FBC root into image at /configs and pre-populate serve cache
 ADD custom-catalog /configs
-RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
+RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only", "--pprof-addr="]
 
 FROM quay.io/operator-framework/opm:latest
 # The base image is expected to contain
