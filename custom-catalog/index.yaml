@@ -1,5 +1,98 @@
 ---
 schema: olm.channel
+package: cloud-native-postgresql
+name: old
+entries:
+- name: cloud-native-postgresql.v1.24.4
+  replaces: cloud-native-postgresql.v1.23.6
+- name: cloud-native-postgresql.v1.23.6
+---
+schema: olm.channel
+package: cloud-native-postgresql
+name: new
+entries:
+- name: cloud-native-postgresql.v1.26.0
+---
+defaultChannel: new
+name: cloud-native-postgresql
+schema: olm.package
+---
+image: registry.connect.redhat.com/enterprisedb/cloud-native-postgresql@sha256:257c27de63e8d833e80593ae0235fb3e3efd75e0be9dbfcc615f583f1c57ce97
+name: cloud-native-postgresql.v1.26.0
+package: cloud-native-postgresql
+properties:
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Cluster
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Backup
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: ScheduledBackup
+    version: v1
+- type: olm.package
+  value:
+    packageName: cloud-native-postgresql
+    version: 1.26.0
+schema: olm.bundle
+---
+image: registry.connect.redhat.com/enterprisedb/cloud-native-postgresql@sha256:bfbb9d0d5556eb067543f4e139a935000319b439f700240adaf393c68bd8244b
+name: cloud-native-postgresql.v1.24.4
+package: cloud-native-postgresql
+properties:
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Cluster
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Backup
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: ScheduledBackup
+    version: v1
+- type: olm.package
+  value:
+    packageName: cloud-native-postgresql
+    version: 1.24.4
+schema: olm.bundle
+---
+image: registry.connect.redhat.com/enterprisedb/cloud-native-postgresql@sha256:934e01ed5cd35cf681414b9136a337514a1b73c0110871f1c78ba98447badb0f
+name: cloud-native-postgresql.v1.23.6
+package: cloud-native-postgresql
+properties:
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Cluster
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: Backup
+    version: v1
+- type: olm.gvk
+  value:
+    group: postgresql.k8s.enterprisedb.io
+    kind: ScheduledBackup
+    version: v1
+- type: olm.package
+  value:
+    packageName: cloud-native-postgresql
+    version: 1.23.6
+schema: olm.bundle
+---
+schema: olm.channel
 package: nginx-ingress-operator
 name: old
 entries:
