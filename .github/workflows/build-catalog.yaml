@@ -31,14 +31,18 @@ jobs:
         uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
 
       # Binary: linux-amd64-opm - https://github.com/operator-framework/operator-registry/releases/
-      - name: Download latest opm binary from Github
-        run: |
-          # Get the latest release from the operator-registry repo
-          curl -s https://api.github.com/repos/operator-framework/operator-registry/releases/latest \
-            | grep "browser_download_url.*linux-amd64-opm" \
-            | cut -d : -f 2,3 \
-            | tr -d \" \
-            | wget -qi -
+      - name: Download latest opm binary from Github with retries
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 5
+          timeout_minutes: 10
+          command: |
+            # Get the latest release from the operator-registry repo
+            curl -s https://api.github.com/repos/operator-framework/operator-registry/releases/latest \
+              | grep "browser_download_url.*linux-amd64-opm" \
+              | cut -d : -f 2,3 \
+              | tr -d \" \
+              | wget -qi -
 
       - name: Make opm binary executable
         run: chmod +x linux-amd64-opm
