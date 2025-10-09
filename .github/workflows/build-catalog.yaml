@@ -78,4 +78,6 @@ jobs:
               --file custom-catalog.Dockerfile \
               --push \
               --tag ${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:latest \
+              --cache-from type=registry,ref=${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:buildcache \
+              --cache-to type=registry,ref=${{ env.REGISTRY }}/${{ env.ORGANIZATION }}/${{ env.IMAGE_NAME }}:buildcache,mode=max \
               .
