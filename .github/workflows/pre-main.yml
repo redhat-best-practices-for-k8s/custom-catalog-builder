@@ -6,7 +6,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+permissions: read-all
 env:
   REGISTRY: quay.io
   ORGANIZATION: redhat-best-practices-for-k8s
