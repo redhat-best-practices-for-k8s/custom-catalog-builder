@@ -29,16 +29,12 @@ jobs:
 
       # Binary: linux-amd64-opm - https://github.com/operator-framework/operator-registry/releases/
       - name: Download latest opm binary from Github
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          # Get the latest release from the operator-registry repo
-          curl -s https://api.github.com/repos/operator-framework/operator-registry/releases/latest \
-            | grep "browser_download_url.*linux-amd64-opm" \
-            | cut -d : -f 2,3 \
-            | tr -d \" \
-            | wget -qi -
-
-      - name: Make opm binary executable
-        run: chmod +x linux-amd64-opm
+          gh release download --repo operator-framework/operator-registry --pattern 'linux-amd64-opm'
+          test -f linux-amd64-opm || { echo "ERROR: linux-amd64-opm was not downloaded"; exit 1; }
+          chmod +x linux-amd64-opm
 
       - name: Run opm validate command with retries
         uses: nick-fields/retry@v3
