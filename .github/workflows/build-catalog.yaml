@@ -32,7 +32,7 @@ jobs:
 
       # Binary: linux-amd64-opm - https://github.com/operator-framework/operator-registry/releases/
       - name: Download latest opm binary from Github with retries
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         env:
           GH_TOKEN: ${{ github.token }}
         with:
@@ -45,7 +45,7 @@ jobs:
             chmod +x linux-amd64-opm
 
       - name: Run opm validate command with retries
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           max_attempts: 10
           command: ./linux-amd64-opm validate custom-catalog
@@ -65,7 +65,7 @@ jobs:
       # Example: Pushes the image quay.io/redhat-best-practices-for-k8s/qe-custom-catalog:v4.14-latest
       # The idea being that we want to rebuild the images daily, but apply our custom catalog settings as well.
       - name: Build Catalog Image(s) with retries
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           max_attempts: 10
           timeout_minutes: 90
