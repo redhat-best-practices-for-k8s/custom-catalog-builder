@@ -37,7 +37,7 @@ jobs:
           chmod +x linux-amd64-opm
 
       - name: Run opm validate command with retries
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           max_attempts: 10
           command: ./linux-amd64-opm validate custom-catalog
@@ -48,7 +48,7 @@ jobs:
 
       # Test build only - no push to registry
       - name: Test Build Catalog Image(s) with retries
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           max_attempts: 10
           timeout_minutes: 90
